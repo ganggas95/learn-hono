@@ -1,9 +1,5 @@
-import { Hono } from 'hono'
+import "reflect-metadata";
+import BootstrapApp from './config/bootstrap';
 
-const app = new Hono()
-
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
-
+const app = new BootstrapApp().app;
 export default app
