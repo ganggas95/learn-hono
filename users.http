@@ -1,0 +1,21 @@
+
+# GET http://localhost:3000/users/list
+# POST http://localhost:3000/users/list
+# Content-Type: application/json
+
+# {
+#     "name": "Subhan Nizar",
+#     "email": "subhannizar25@gmail.com"
+# }
+
+# DELETE  http://localhost:3000/users/1
+
+# GET  http://localhost:3000/users/2
+
+# PUT  http://localhost:3000/users/2
+# Content-Type: application/json
+
+# {
+#     "name": "Subhan Nizars",
+#     "email": "subhannizar25@gmail.com"
+# }
