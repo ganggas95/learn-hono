@@ -39,6 +39,7 @@ class UserService {
         if (!findUser) {
             throw new Error("User not found")
         }
+        Object.assign(findUser, userDto)
         return await this.userRepository.save(findUser);
     }
 }
