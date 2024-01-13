@@ -1,6 +1,6 @@
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import { Repository } from "typeorm";
-import DI_IDENTIFIER from "../../constants/identifiers";
+import { InjectRepository } from "../../commons/typeorm.decorators";
 import { UserDto } from "./dto/users.dto";
 import UsersEntity from "./entity/users.entitiy";
 
@@ -9,9 +9,9 @@ import UsersEntity from "./entity/users.entitiy";
 class UserService {
 
     constructor(
-        @inject(DI_IDENTIFIER.USER_REPOSITORY)
+        @InjectRepository(UsersEntity)
         private readonly userRepository: Repository<UsersEntity>,
-    ) {}
+    ) { }
 
     async findById(id: number): Promise<UsersEntity | undefined> {
         return await this.userRepository.findOneBy(
@@ -39,6 +39,7 @@ class UserService {
         if (!findUser) {
             throw new Error("User not found")
         }
+        Object.assign(findUser, userDto)
         return await this.userRepository.save(findUser);
     }
 }

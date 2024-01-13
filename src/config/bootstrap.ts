@@ -1,13 +1,14 @@
 import { Hono } from "hono";
 import { HonoBase } from "hono/hono-base";
+import { Container } from "inversify";
 import UserRoutes from "../apps/users/users.routes";
 import AppContainer from "./container";
 
 class BootstrapApp {
     public app: HonoBase;
-    public container: AppContainer;
+    public container: Container;
     constructor() {
-        this.container = new AppContainer();
+        this.container = new AppContainer().container;
         this.app = new Hono();
         this.initRoutes();
     }
