@@ -4,6 +4,7 @@ import { Repository } from "typeorm";
 import { UsersEntity } from "../apps/users/entity";
 import UserController from "../apps/users/users.controller";
 import UserService from "../apps/users/users.services";
+import { getRepositoryToken } from "../commons/typeorm.utils";
 import DI_IDENTIFIER from "../constants/identifiers";
 import Database from "./data-source";
 
@@ -23,8 +24,10 @@ class AppContainer {
 
     private initRepositories() {
         const database = this.container.get<Database>(DI_IDENTIFIER.DATABASE);
-        this.container.bind<Repository<UsersEntity>>(DI_IDENTIFIER.USER_REPOSITORY)
-            .toConstantValue(database.manager.getRepository(UsersEntity));
+        database.entities.forEach(entity => {
+            this.container.bind<Repository<UsersEntity>>(getRepositoryToken(entity))
+                .toConstantValue(database.manager.getRepository(entity));
+        })
     }
 }
 

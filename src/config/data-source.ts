@@ -6,13 +6,15 @@ import { UsersEntity } from '../apps/users/entity';
 @injectable()
 class Database {
     public dataSource: DataSource;
+    public entities = [UsersEntity];
     constructor() {
+
         this.dataSource = new DataSource({
             type: "postgres",
             url: process.env.DB_URL,
             synchronize: true,
             logging: true,
-            entities: [UsersEntity],
+            entities: this.entities,
             subscribers: [],
             migrations: [],
         });
