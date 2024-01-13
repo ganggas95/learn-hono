@@ -16,16 +16,25 @@ class AppContainer {
         this.init();
     }
     init() {
-        this.container.bind<Database>(DI_IDENTIFIER.DATABASE).to(Database);
+        this.container
+            .bind<Database>(DI_IDENTIFIER.DATABASE)
+            .to(Database);
         this.initRepositories();
-        this.container.bind<UserService>(DI_IDENTIFIER.USER_SERVICE).to(UserService);
-        this.container.bind<UserController>(DI_IDENTIFIER.USER_CONTROLLER).to(UserController).inRequestScope();
+        this.container
+            .bind<UserService>(DI_IDENTIFIER.USER_SERVICE)
+            .to(UserService);
+        this.container
+            .bind<UserController>(DI_IDENTIFIER.USER_CONTROLLER)
+            .to(UserController).inRequestScope();
     }
 
     private initRepositories() {
-        const database = this.container.get<Database>(DI_IDENTIFIER.DATABASE);
+        const database = this
+            .container
+            .get<Database>(DI_IDENTIFIER.DATABASE);
         database.entities.forEach(entity => {
-            this.container.bind<Repository<UsersEntity>>(getRepositoryToken(entity))
+            this.container
+                .bind<Repository<UsersEntity>>(getRepositoryToken(entity))
                 .toConstantValue(database.manager.getRepository(entity));
         })
     }
