@@ -13,6 +13,7 @@ class BootstrapApp {
     }
 
     initRoutes() {
+
         this.app.route("/users", new UserRoutes(this.container).routes);
     }
 }

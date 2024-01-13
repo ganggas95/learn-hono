@@ -1,5 +1,6 @@
 import { inject, injectable } from "inversify";
-import UsersEntity from "./users.entitiy";
+import { UserDto } from "./dto/users.dto";
+import UsersEntity from "./entity/users.entitiy";
 import UserRepository from "./users.repository";
 
 
@@ -8,35 +9,36 @@ class UserService {
 
     constructor(
         @inject(UserRepository)
-        private readonly userRepository: UserRepository
+        private readonly userRepository: UserRepository,
     ) { }
 
-    findById(id: number): UsersEntity | undefined {
-        return this.userRepository.findById(id)
+    async findById(id: number): Promise<UsersEntity | undefined> {
+        return await this.userRepository.repository.findOneBy(
+            { id }
+        ) || undefined;
     }
 
-    findAll(): UsersEntity[] {
-        return this.userRepository.findAll()
+    async findAll(): Promise<UsersEntity[]> {
+        return await this.userRepository.repository.find() || [];
     }
-    create(name: string, email: string): UsersEntity {
-        let user = this.userRepository.create(name, email);
-        user = this.userRepository.save(user);
-        return user;
-    }
-
-    delete(id: number): void {
-        this.userRepository.delete(id)
+    async create(userDto: UserDto): Promise<UsersEntity | null> {
+        let user = this.userRepository.repository.create(userDto);
+        if (!user) {
+            return null;
+        }
+        return await this.userRepository.repository.save(user);
     }
 
-    update(id: number, name: string, email: string): UsersEntity {
-        let findUser = this.userRepository.findById(id);
+    async delete(id: number): Promise<void> {
+        await this.userRepository.repository.softDelete(id)
+    }
+
+    async update(id: number, userDto: UserDto): Promise<UsersEntity> {
+        let findUser = await this.findById(id)
         if (!findUser) {
             throw new Error("User not found")
         }
-        findUser.name = name
-        findUser.email = email
-        findUser = this.userRepository.save(findUser);
-        return findUser;
+        return await this.userRepository.repository.save(findUser);
     }
 }
 
