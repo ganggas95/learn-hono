@@ -1,5 +1,6 @@
 import { Context, TypedResponse } from "hono";
 import { inject, injectable } from "inversify";
+import DI_IDENTIFIER from "../../constants/identifiers";
 import BaseController, { BaseControllerType } from "../../core/controller";
 import UserService from "./users.services";
 
@@ -8,7 +9,7 @@ import UserService from "./users.services";
 class UserController extends BaseController implements BaseControllerType {
 
     constructor(
-        @inject(UserService)
+        @inject(DI_IDENTIFIER.USER_SERVICE)
         private readonly userService: UserService,
     ) {
         super();

@@ -1,8 +1,10 @@
 import { Container } from "inversify";
 
+import { Repository } from "typeorm";
+import { UsersEntity } from "../apps/users/entity";
 import UserController from "../apps/users/users.controller";
-import UserRepository from "../apps/users/users.repository";
 import UserService from "../apps/users/users.services";
+import DI_IDENTIFIER from "../constants/identifiers";
 import Database from "./data-source";
 
 
@@ -13,12 +15,17 @@ class AppContainer {
         this.init();
     }
     init() {
-        this.container.bind<Database>(Database).toSelf();
-        this.container.bind<UserRepository>(UserRepository).toSelf();
-        this.container.bind<UserService>(UserService).toSelf();
-        this.container.bind<UserController>(UserController).toSelf().inRequestScope();
+        this.container.bind<Database>(DI_IDENTIFIER.DATABASE).to(Database);
+        this.initRepositories();
+        this.container.bind<UserService>(DI_IDENTIFIER.USER_SERVICE).to(UserService);
+        this.container.bind<UserController>(DI_IDENTIFIER.USER_CONTROLLER).to(UserController).inRequestScope();
     }
-    
+
+    private initRepositories() {
+        const database = this.container.get<Database>(DI_IDENTIFIER.DATABASE);
+        this.container.bind<Repository<UsersEntity>>(DI_IDENTIFIER.USER_REPOSITORY)
+            .toConstantValue(database.manager.getRepository(UsersEntity));
+    }
 }
 
 export default AppContainer;
