@@ -7,7 +7,6 @@ import { UsersEntity } from '../apps/users/entity';
 class Database {
     public dataSource: DataSource;
     constructor() {
-        console.log(process.env.DB_URL);
         this.dataSource = new DataSource({
             type: "postgres",
             url: process.env.DB_URL,
