@@ -6,10 +6,13 @@
     "jsxImportSource": "hono/jsx",
     "target": "es5",
     "lib": ["es6", "dom"],
-    "types": ["reflect-metadata", "node"],
+    "types": ["reflect-metadata", "bun-types", "vitest/globals"],
     "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }
